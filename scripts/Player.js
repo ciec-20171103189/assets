@@ -11,6 +11,11 @@ cc.Class({
         maxMoveSpeed: 0,
 
         accel: 0,
+        
+        jumpAudio: {
+        default: null,
+        type: cc.AudioClip
+    },
     },
     setJumpAction: function () {
 
@@ -18,7 +23,14 @@ cc.Class({
 
         var jumpDown = cc.moveBy(this.jumpDuration, cc.v2(0, -this.jumpHeight)).easing(cc.easeCubicActionIn());
 
-        return cc.repeatForever(cc.sequence(jumpUp, jumpDown));
+        var callback = cc.callFunc(this.playJumpSound, this);
+        
+        return cc.repeatForever(cc.sequence(jumpUp, jumpDown, callback));
+    },
+    
+    playJumpSound: function () {
+    	
+        cc.audioEngine.playEffect(this.jumpAudio, false);
     },
     
     onKeyDown (event) {
