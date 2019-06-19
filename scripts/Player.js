@@ -57,16 +57,16 @@ cc.Class({
  
         this.jumpAction = this.setJumpAction();
         this.node.runAction(this.jumpAction);
-
  
         this.accLeft = false;
         this.accRight = false;
 
         this.xSpeed = 0;
 
-
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
-        cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);    
+        cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
+        
+        this.enabled = false;
     },
 
     onDestroy () {
@@ -75,6 +75,13 @@ cc.Class({
         cc.systemEvent.off(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
     },    
 
+    startMoveAt: function(pos){
+    	this.enabled = true;
+    	this.xSpeed = 0;
+    	this.node.setPosition(pos);
+    	this.node.runAction(this.jumpAction);
+    },
+    
     update: function (dt) {
 
         if (this.accLeft) {

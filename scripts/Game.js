@@ -29,7 +29,12 @@ cc.Class({
         scoreAudio: {
             default: null,
             type: cc.AudioClip
-        }
+        },
+        
+        btnNode: {
+            default: null,
+            type: cc.Node
+        },
     },
 
     onLoad: function () {
@@ -44,6 +49,10 @@ cc.Class({
         this.score = 0;
     },
 
+    onstartGame: function(){
+    	
+    },
+    
     spawnNewStar: function() {
 
         var newStar = cc.instantiate(this.starPrefab);
@@ -60,21 +69,20 @@ cc.Class({
 
     getNewStarPosition: function () {
         var randX = 0;
-        // 根据地平面位置和主角跳跃高度，随机得到一个星星的 y 坐标
+
         var randY = this.groundY + Math.random() * this.player.getComponent('Player').jumpHeight + 50;
-        // 根据屏幕宽度，随机得到一个星星 x 坐标
+
         var maxX = this.node.width/2;
         randX = (Math.random() - 0.5) * 2 * maxX;
-        // 返回星星坐标
+
         return cc.v2(randX, randY);
     },
 
     update: function (dt) {
-        // 每帧更新计时器，超过限度还没有生成新的星星
-        // 就会调用游戏失败逻辑
+
         if (this.timer > this.starDuration) {
             this.gameOver();
-            this.enabled = false;   // disable gameOver logic to avoid load scene repeatedly
+            this.enabled = false;
             return;
         }
         this.timer += dt;
@@ -82,14 +90,14 @@ cc.Class({
 
     gainScore: function () {
         this.score += 1;
-        // 更新 scoreDisplay Label 的文字
+
         this.scoreDisplay.string = 'Score: ' + this.score;
-        // 播放得分音效
+
         cc.audioEngine.playEffect(this.scoreAudio, false);
     },
 
     gameOver: function () {
-        this.player.stopAllActions(); //停止 player 节点的跳跃动作
+        this.player.stopAllActions(); 
         cc.director.loadScene('game');
     }
 });
