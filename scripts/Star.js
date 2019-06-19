@@ -1,10 +1,9 @@
-
 cc.Class({
     extends: cc.Component,
-
+    
     properties: {
-    	
-    	pickRadius: 0,
+
+        pickRadius: 0,
     },
 
     getPlayerDistance: function () {
@@ -16,25 +15,22 @@ cc.Class({
     },
 
     onPicked: function() {
-    	
-        this.game.spawnNewStar();
-     
-        this.game.gainScore();
-        
-        this.node.destroy();
-    },
-    
-    start () {
 
+        this.game.spawnNewStar();
+
+        this.game.gainScore();
+
+        this.node.destroy();
     },
 
     update: function (dt) {
-  
+
         if (this.getPlayerDistance() < this.pickRadius) {
-        	
+   
             this.onPicked();
             return;
         }
+
         var opacityRatio = 1 - this.game.timer/this.game.starDuration;
         var minOpacity = 50;
         this.node.opacity = minOpacity + Math.floor(opacityRatio * (255 - minOpacity));
