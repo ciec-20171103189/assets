@@ -82,6 +82,15 @@ cc.Class({
     	this.node.runAction(this.jumpAction);
     },
     
+    stpoMove: function(){
+    	this.node.stopAllActions;
+    },
+    
+    genCenterPos: function(){
+    	var centerPos = cc.p(this.node.x,this.node.y + this.node.heigth/2);
+    	return centerPos;
+    },
+    
     update: function (dt) {
 
         if (this.accLeft) {

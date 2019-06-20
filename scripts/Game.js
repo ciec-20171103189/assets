@@ -1,3 +1,6 @@
+const Player = require('Player');
+
+var Game =
 cc.Class({
     extends: cc.Component,
 
@@ -18,7 +21,7 @@ cc.Class({
 
         player: {
             default: null,
-            type: cc.Node
+            type: cc.Player
         },
 
         scoreDisplay: {
