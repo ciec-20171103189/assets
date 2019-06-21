@@ -8,9 +8,9 @@ cc.Class({
 
     getPlayerDistance: function () {
 
-        var playerPos = this.game.player.getPosition();
+        var playerPos = this.game.player.getCenterPos();
 
-        var dist = this.node.position.sub(playerPos).mag();
+        var dist = cc.pDistance(this.node.postion,playerPos);
         return dist;
     },
 

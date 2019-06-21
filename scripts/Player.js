@@ -56,7 +56,7 @@ cc.Class({
     onLoad: function() {
  
         this.jumpAction = this.setJumpAction();
-        this.node.runAction(this.jumpAction);
+      //  this.node.runAction(this.jumpAction);
  
         this.accLeft = false;
         this.accRight = false;
@@ -83,7 +83,7 @@ cc.Class({
     },
     
     stpoMove: function(){
-    	this.node.stopAllActions;
+    	this.node.stopAllActions();
     },
     
     genCenterPos: function(){

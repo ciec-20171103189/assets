@@ -46,14 +46,25 @@ cc.Class({
 
         this.timer = 0;
         this.starDuration = 0;
-
-        this.spawnNewStar();
- 
-        this.score = 0;
+        
+     //   this.spawnNewStar();
+       // this.score = 0;
+        this.isRunning = false;
     },
 
-    onstartGame: function(){
+    onStartGame: function(){
     	
+    	this.resetScore();
+    	this.isRunning = true;
+    	this.btnNode.setPositionX(3000);
+    	this.player.startMoveAt(cc.p(0,this.goundY));
+    	this.spawnNewStar();
+    },
+    
+    resetScore: function(){
+    	
+    	this.score = 0;
+    	this.scoreDisplay.string = 'Score: ' + this.score.toString();
     },
     
     spawnNewStar: function() {
@@ -83,6 +94,8 @@ cc.Class({
 
     update: function (dt) {
 
+    	if(!this.isRunning)
+    		return;
         if (this.timer > this.starDuration) {
             this.gameOver();
             this.enabled = false;
@@ -100,7 +113,7 @@ cc.Class({
     },
 
     gameOver: function () {
-        this.player.stopAllActions(); 
+        this.player.stopMove(); 
         cc.director.loadScene('game');
-    }
+    },
 });
