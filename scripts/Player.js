@@ -80,6 +80,15 @@ cc.Class({
         this.node.runAction(this.setJumpAction());
     },
     
+    stopMove: function () {
+        this.node.stopAllActions();
+    },
+    
+    getCenterPos: function () {
+        var centerPos = cc.v2(this.node.x, this.node.y + this.node.height/2);
+        return centerPos;
+    },
+    
     update: function (dt) {
 
         if (this.accLeft) {

@@ -1,4 +1,6 @@
-cc.Class({
+const Player = require('Player');
+
+var Game = cc.Class({
     extends: cc.Component,
 
     properties: {
@@ -14,7 +16,7 @@ cc.Class({
         },
         player: {
             default: null,
-            type: cc.Node
+            type: Player
         },
         scoreDisplay: {
             default: null,
@@ -28,6 +30,10 @@ cc.Class({
             default: null,
             type: cc.Node
         },
+        gameOverNode: {
+            default: null,
+            type: cc.Node
+        },
     },
 
     onLoad: function () {
@@ -35,21 +41,21 @@ cc.Class({
         this.groundY = this.ground.y + this.ground.height/2;
         this.timer = 0;
         this.starDuration = 0;
-        this.spawnNewStar();
-        this.score = 0;
+      //  this.spawnNewStar();
+      //  this.score = 0;
+        this.isRunning = false;
     },
 
     onStartGame: function () {
-        // 初始化计分
+
         this.resetScore();
-        // set game state to running
-        this.enabled = true;
-        // set button and gameover text out of screen
+      //  this.enabled = true;
+        this.isRunning = true;
         this.btnNode.x = 3000;
-        this.gameOverNode.active = false;
-        // reset player position and move speed
+      //  this.gameOverNode.active = false;
+        
         this.player.startMoveAt(cc.v2(0, this.groundY));
-        // spawn star
+
         this.spawnNewStar();
     },
     
@@ -72,8 +78,22 @@ cc.Class({
         return cc.v2(randX, randY);
     },
 
+    resetScore: function () {
+        this.score = 0;
+        this.scoreDisplay.string = 'Score: ' + this.score.toString();
+    },
+    
+    gainScore: function () {
+    	
+        this.score += 1;
+        this.scoreDisplay.string = 'Score: ' + this.score;
+        cc.audioEngine.playEffect(this.scoreAudio, false);
+    },
+    
     update: function (dt) {
         
+    	if (!this.isRunning)
+    		return;
         if (this.timer > this.starDuration) {
             this.gameOver();
             this.enabled = false;  
@@ -82,15 +102,12 @@ cc.Class({
         this.timer += dt;
     },
 
-    gainScore: function () {
-    	
-        this.score += 1;
-        this.scoreDisplay.string = 'Score: ' + this.score;
-        cc.audioEngine.playEffect(this.scoreAudio, false);
-    },
-
     gameOver: function () {
-        this.player.stopAllActions(); 
-        cc.director.loadScene('game');
+    	this.player.stopMove(); 
+    	this.gameOverNode.active = true;
+    	this.scheduleOnce(function(){
+    		cc.director.loadScene('game');
+    	},3);
+       // cc.director.loadScene('game');
     }
 });
