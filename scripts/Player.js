@@ -17,7 +17,9 @@ cc.Class({
 
         var jumpUp = cc.moveBy(this.jumpDuration, cc.v2(0, this.jumpHeight)).easing(cc.easeCubicActionOut());
         var jumpDown = cc.moveBy(this.jumpDuration, cc.v2(0, -this.jumpHeight)).easing(cc.easeCubicActionIn());
+
         var callback = cc.callFunc(this.playJumpSound, this);
+
         return cc.repeatForever(cc.sequence(jumpUp, jumpDown, callback));
     },
 
@@ -27,7 +29,7 @@ cc.Class({
     },
 
     onKeyDown (event) {
-    	
+
         switch(event.keyCode) {
             case cc.macro.KEY.a:
                 this.accLeft = true;
@@ -51,20 +53,18 @@ cc.Class({
     },
 
     onLoad: function() {
-     
-        this.jumpAction = this.setJumpAction();
-    //    this.node.runAction(this.jumpAction);
 
-     
+        this.jumpAction = this.setJumpAction();
+        this.node.runAction(this.jumpAction);
+
         this.accLeft = false;
         this.accRight = false;
-    
+
         this.xSpeed = 0;
 
+
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
-        cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);  
-        
-        this.enabled = false;
+        cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);    
     },
 
     onDestroy () {
@@ -73,22 +73,6 @@ cc.Class({
         cc.systemEvent.off(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
     },    
 
-    startMoveAt: function (pos) {
-        this.enabled = true;
-        this.xSpeed = 0;
-        this.node.setPosition(pos);
-        this.node.runAction(this.setJumpAction());
-    },
-    
-    stopMove: function () {
-        this.node.stopAllActions();
-    },
-    
-    getCenterPos: function () {
-        var centerPos = cc.v2(this.node.x, this.node.y + this.node.height/2);
-        return centerPos;
-    },
-    
     update: function (dt) {
 
         if (this.accLeft) {
@@ -98,11 +82,18 @@ cc.Class({
         }
 
         if ( Math.abs(this.xSpeed) > this.maxMoveSpeed ) {
-
             this.xSpeed = this.maxMoveSpeed * this.xSpeed / Math.abs(this.xSpeed);
         }
 
         this.node.x += this.xSpeed * dt;
+        
+        if ( this.node.x > this.node.parent.width/2) {
+            this.node.x = this.node.parent.width/2;
+            this.xSpeed = 0;
+        } else if (this.node.x < -this.node.parent.width/2) {
+            this.node.x = -this.node.parent.width/2;
+            this.xSpeed = 0;
+        }
     },
 });
 
